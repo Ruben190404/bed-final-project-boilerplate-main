@@ -38,9 +38,9 @@ router.get('/:id', async (req, res) => {
 router.post('/', authMiddleware, async (req, res) => {
     try {
         const { userId, propertyId, checkinDate, checkoutDate, numberOfGuests, totalPrice, bookingStatus } = req.body
-        const newBooking = await createBooking(userId, propertyId, checkinDate, checkoutDate, numberOfGuests, totalPrice, bookingStatus);
+        const { newBooking, problem } = await createBooking(userId, propertyId, checkinDate, checkoutDate, numberOfGuests, totalPrice, bookingStatus);
         if(!newBooking){
-            res.status(400).send(`Request body is not complete!`);
+            res.status(400).send(problem);
         } else {
             res.status(201).json(newBooking)
         }

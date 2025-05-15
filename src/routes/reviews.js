@@ -37,9 +37,9 @@ router.get('/:id', async (req, res) => {
 router.post('/', authMiddleware, async (req, res) => {
     try {
         const { userId, propertyId, rating, comment } = req.body
-        const newReview = await createReview(userId, propertyId, rating, comment);
+        const { newReview, problem } = await createReview(userId, propertyId, rating, comment);
         if(!newReview){
-            res.status(400).send(`Request body is not complete!`);
+            res.status(400).send(problem);
         } else {
             res.status(201).json(newReview)
         }

@@ -46,27 +46,35 @@ async function main() {
   }
 
   // Upsert Properties
+  // for (const property of properties) {
+  //   const isMalibu = property.location.toLowerCase().includes('malibu');
+  //   let amenityIds = [];
+
+  //   if (isMalibu) {
+  //     const wifi = await prisma.amenity.findFirst({
+  //       where: { name: { equals: 'Wifi', mode: 'insensitive' } },
+  //     });
+  //     if (wifi) amenityIds = [wifi.id];
+  //   } else {
+  //     const randomAmenities = randomSubset(amenities, Math.floor(Math.random() * 4) + 3);
+  //     amenityIds = randomAmenities.map(a => a.id);
+  //   }
+
+  //   await prisma.property.create({
+  //     data: {
+  //       ...property,
+  //       amenities: {
+  //         connect: amenityIds.map(id => ({ id })),
+  //       },
+  //     },
+  //   });
+  // }
+
   for (const property of properties) {
-    const isMalibu = property.location.toLowerCase().includes('malibu');
-    let amenityIds = [];
-
-    if (isMalibu) {
-      const wifi = await prisma.amenity.findFirst({
-        where: { name: { equals: 'Wifi', mode: 'insensitive' } },
-      });
-      if (wifi) amenityIds = [wifi.id];
-    } else {
-      const randomAmenities = randomSubset(amenities, Math.floor(Math.random() * 4) + 3);
-      amenityIds = randomAmenities.map(a => a.id);
-    }
-
-    await prisma.property.create({
-      data: {
-        ...property,
-        amenities: {
-          connect: amenityIds.map(id => ({ id })),
-        },
-      },
+    await prisma.property.upsert({
+      where: { id: property.id},
+      update: {},
+      create: property,
     });
   }
 

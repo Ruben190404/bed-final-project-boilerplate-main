@@ -12,7 +12,11 @@ router.get('/', async (req, res) => {
     try {
         const { name } = req.query;
         const hosts = await getHosts(name);
-        res.status(200).json(hosts)
+        if(hosts.length == 0){
+            res.status(404).send(`Hosts with name: "${name}" have not been found!`)
+        } else {
+            res.status(200).json(hosts)
+        }
     } catch (error) {
         console.error(error)
         res.status(500).send('Something went wrong while getting list of hosts!')
@@ -38,9 +42,9 @@ router.get('/:id', async (req, res) => {
 router.post('/', authMiddleware, async (req, res) => {
     try {
         const { username, password, name, email, phoneNumber, profilePicture, aboutMe } = req.body
-        const newHost = await createHost(username, password, name, email, phoneNumber, profilePicture, aboutMe);
+        const { newHost, problem } = await createHost(username, password, name, email, phoneNumber, profilePicture, aboutMe);
         if(!newHost){
-            res.status(400).send(`Request body is not complete!`);
+            res.status(400).send(problem);
         } else {
             res.status(201).json(newHost);
         }

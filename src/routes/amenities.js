@@ -37,9 +37,9 @@ router.get('/:id', async (req, res) => {
 router.post('/', authMiddleware, async (req, res) => {
     try {
         const { name } = req.body
-        const newAmenity = await createAmenity(name);
+        const { newAmenity, problem } = await createAmenity(name);
         if(!newAmenity){
-            res.status(400).send(`Request body is not complete!`);
+            res.status(400).send(problem);
         } else {
             res.status(201).json(newAmenity)
         }

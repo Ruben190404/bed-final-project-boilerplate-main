@@ -39,9 +39,9 @@ router.get('/:id', async (req, res) => {
 router.post('/', authMiddleware, async (req, res) => {
     try {
         const { hostId, title, description, location, pricePerNight, bedroomCount, bathRoomCount, maxGuestCount, rating, amenityArray } = req.body
-        const newProperty = await createProperty(hostId, title, description, location, pricePerNight, bedroomCount, bathRoomCount, maxGuestCount, rating, amenityArray);
+        const { newProperty, problem } = await createProperty(hostId, title, description, location, pricePerNight, bedroomCount, bathRoomCount, maxGuestCount, rating, amenityArray);
         if(!newProperty){
-            res.status(400).send(`Request body is not complete!`); 
+            res.status(400).send(problem); 
         } else {
             res.status(201).json(newProperty)
         }

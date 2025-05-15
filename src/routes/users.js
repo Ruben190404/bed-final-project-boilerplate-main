@@ -38,9 +38,9 @@ router.get('/:id', async (req, res) => {
 router.post('/', authMiddleware, async (req, res) => {
     try {
         const { username, password, name, email, phoneNumber, profilePicture } = req.body
-        const newUser = await createUser(username, password, name, email, phoneNumber, profilePicture);
+        const {newUser, problem} = await createUser(username, password, name, email, phoneNumber, profilePicture);
         if(!newUser){
-            res.status(400).send(`Request body is not complete!`);
+            res.status(400).send(problem);
         } else {
             res.status(201).json(newUser)
         }
